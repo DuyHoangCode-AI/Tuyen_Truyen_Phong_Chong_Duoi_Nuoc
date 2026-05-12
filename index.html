@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Phòng chống đuối nước & Bơi lội an toàn | Đừng là thống kê tiếp theo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-black: #0a0a0a;
+      --alert-red: #FF1A1A;
+      --white: #FFFFFF;
+      --deep-water: #1A5276;
+      --accent-orange: #FF6B1A;
+      --accent-yellow: #FFCC00;
+      --accent-green: #2ECC71;
+      --glow-red: rgba(255, 26, 26, 0.7);
+      --font-heading: 'Oswald', sans-serif;
+      --font-body: 'Source Sans 3', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-black);
+      color: var(--white);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* === SCROLL REVEAL (dùng chung) === */
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity 0.75s cubic-bezier(0.23, 1, 0.32, 1), transform 0.75s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* === WAVES (CSS animated) === */
+    .wave-container {
+      position: relative;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .wave-animated {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 200%;
+      height: 80px;
+      background: repeating-linear-gradient(transparent, transparent 38px, var(--deep-water) 40px, var(--alert-red) 42px);
+      opacity: 0.25;
+      animation: moveWave 12s infinite linear;
+    }
+    .wave-animated:nth-child(2) {
+      opacity: 0.15;
+      animation-duration: 18s;
+      animation-direction: reverse;
+      height: 60px;
+      background: repeating-linear-gradient(transparent, transparent 30px, var(--alert-red) 32px, var(--deep-water) 34px);
+    }
+    @keyframes moveWave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* === GLITCH TEXT === */
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-black);
+      overflow: hidden;
+    }
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--alert-red);
+      clip: rect(0, 900px, 0, 0);
+      animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -2px;
+      text-shadow: 2px 0 var(--deep-water);
+      clip: rect(0, 900px, 0, 0);
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(32px, 9999px, 98px, 0); }
+      20% { clip: rect(12px, 9999px, 56px, 0); }
+      40% { clip: rect(78px, 9999px, 105px, 0); }
+      60% { clip: rect(22px, 9999px, 142px, 0); }
+      80% { clip: rect(54px, 9999px, 18px, 0); }
+      100% { clip: rect(8px, 9999px, 122px, 0); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(65px, 9999px, 28px, 0); }
+      20% { clip: rect(10px, 9999px, 88px, 0); }
+      40% { clip: rect(42px, 9999px, 72px, 0); }
+      60% { clip: rect(88px, 9999px, 36px, 0); }
+      80% { clip: rect(18px, 9999px, 124px, 0); }
+      100% { clip: rect(96px, 9999px, 14px, 0); }
+    }
+
+    /* === TICKER (chạy liên tục) === */
+    .ticker-banner {
+      background: var(--alert-red);
+      color: white;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      padding: 0.7rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      border-top: 2px solid black;
+      border-bottom: 2px solid black;
+    }
+    .ticker-track {
+      display: inline-block;
+      animation: ticker 28s linear infinite;
+    }
+    .ticker-track span {
+      margin-right: 2.5rem;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ========== MOBILE-FIRST (mặc định cho màn hình nhỏ) ========== */
+    section {
+      padding: 2.5rem 1rem;
+      position: relative;
+    }
+
+    /* Hero mobile */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(circle at 30% 40%, #1A3A4A 5%, #0a0a0a 85%);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem 1rem;
+    }
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      color: var(--white);
+      text-shadow: 0 0 20px var(--glow-red);
+      text-transform: uppercase;
+    }
+    .hero .sub-slogan {
+      font-size: 1rem;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #ccc;
+    }
+    .hero .wave-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80"><path fill="%231A5276" opacity="0.35" d="M0,40 C360,80 720,0 1440,40 L1440,80 L0,80 Z"/></svg>') repeat-x;
+      background-size: cover;
+      animation: waveDrift 8s ease-in-out infinite alternate;
+    }
+    @keyframes waveDrift {
+      0% { transform: translateY(3px); }
+      100% { transform: translateY(-5px); }
+    }
+
+    /* Thống kê mobile */
+    .stats-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .stat-item {
+      background: rgba(26, 26, 26, 0.9);
+      border-left: 5px solid var(--alert-red);
+      padding: 1.2rem;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 26, 26, 0.2);
+    }
+    .counter {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      color: var(--alert-red);
+      line-height: 1.2;
+    }
+    .stat-desc {
+      font-weight: 600;
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    /* Dấu hiệu mobile: 2 cột linh hoạt */
+    .signs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .sign-card {
+      border: 2px solid var(--alert-red);
+      padding: 1rem 0.5rem;
+      text-align: center;
+      background: #0f0f0f;
+      box-shadow: 0 0 12px rgba(255, 26, 26, 0.35);
+      font-size: 0.85rem;
+    }
+    .sign-card svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--alert-red);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Nguyên tắc an toàn mobile */
+    .principles-list {
+      counter-reset: principle;
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+    .principle-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .principle-item::before {
+      counter-increment: principle;
+      content: "0" counter(principle);
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      min-width: 50px;
+    }
+    .principle-item:nth-child(1)::before { color: var(--alert-red); }
+    .principle-item:nth-child(2)::before { color: var(--accent-orange); }
+    .principle-item:nth-child(3)::before { color: var(--accent-yellow); }
+    .principle-item:nth-child(4)::before { color: var(--deep-water); }
+    .principle-item:nth-child(5)::before { color: var(--accent-green); }
+
+    /* Hành động đúng sai mobile */
+    .action-columns {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .col-correct, .col-wrong {
+      padding: 1.5rem;
+      border: 4px solid;
+      font-weight: 700;
+      text-align: center;
+      background: #111;
+      font-size: 0.95rem;
+    }
+    .col-correct { border-color: var(--accent-green); }
+    .col-wrong { border-color: var(--alert-red); }
+
+    /* Kiến thức mở rộng mobile */
+    .knowledge-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Số khẩn cấp mobile */
+    .emergency {
+      background: var(--alert-red);
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .pulse-number {
+      font-family: var(--font-heading);
+      font-size: 3.5rem;
+      animation: pulse 1.3s infinite;
+      display: inline-block;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); text-shadow: 0 0 10px white; }
+      50% { transform: scale(1.08); text-shadow: 0 0 25px yellow; }
+      100% { transform: scale(1); text-shadow: 0 0 10px white; }
+    }
+
+    footer {
+      background: #050505;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .footer-wave {
+      position: absolute;
+      top: -30px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* ========== DESKTOP (PC, LAPTOP) ========== */
+    @media (min-width: 1024px) {
+      section {
+        padding: 5rem 3rem;
+      }
+
+      /* Hero desktop: vẫn full màn hình nhưng text to hơn */
+      .hero h1 {
+        font-size: 5.5rem;
+      }
+      .hero .sub-slogan {
+        font-size: 1.4rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero .wave-overlay {
+        height: 120px;
+      }
+
+      /* Thống kê desktop: hàng ngang 3 cột */
+      .stats-grid {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2.5rem;
+      }
+      .stat-item {
+        min-width: 220px;
+        padding: 2rem;
+      }
+      .counter {
+        font-size: 4rem;
+      }
+      .stat-desc {
+        font-size: 1.1rem;
+      }
+
+      /* Dấu hiệu desktop: 5 cột */
+      .signs-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.8rem;
+      }
+      .sign-card {
+        font-size: 1rem;
+        padding: 1.8rem 0.8rem;
+      }
+      .sign-card svg {
+        width: 50px;
+        height: 50px;
+      }
+
+      /* Nguyên tắc desktop */
+      .principle-item {
+        font-size: 1.4rem;
+      }
+      .principle-item::before {
+        font-size: 2.8rem;
+        min-width: 80px;
+      }
+
+      /* Hành động đúng sai desktop: 2 cột ngang */
+      .action-columns {
+        flex-direction: row;
+      }
+      .col-correct, .col-wrong {
+        flex: 1 1 280px;
+        font-size: 1.2rem;
+        padding: 2.5rem;
+      }
+
+      /* Kiến thức mở rộng desktop: 2 cột */
+      .knowledge-row {
+        flex-direction: row;
+        gap: 3rem;
+      }
+
+      /* Số khẩn cấp desktop to hơn */
+      .pulse-number {
+        font-size: 5.5rem;
+      }
+
+      /* Ticker to hơn một chút */
+      .ticker-banner {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+      }
+    }
+
+    /* Tablet trung gian (tùy chọn) giữ nguyên mobile nhưng có thể nới lỏng */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .signs-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .stats-grid {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ticker banner khẩu hiệu chạy liên tục -->
+  <div class="ticker-banner">
+    <div class="ticker-track">
+      <span>⚡ ĐỪNG ĐỂ CON BẠN LÀ THỐNG KÊ TIẾP THEO</span>
+      <span>⚠️ MỘT PHÚT BẤT CẨNH — CẢ ĐỜI HỐI HẬN</span>
+      <span>🛑 5 TRẺ MỖI NGÀY • GIÁM SÁT CHẶT CHẼ</span>
+      <span>💧 NƯỚC CÓ THỂ LẤY ĐI TẤT CẢ</span>
+      <span>⚡ ĐỪNG ĐỂ CON BẠN LÀ THỐNG KÊ TIẾP THEO</span>
+      <span>⚠️ MỘT PHÚT BẤT CẨNH — CẢ ĐỜI HỐI HẬN</span>
+    </div>
+  </div>
+
+  <!-- 1. HERO -->
+  <section class="hero">
+    <div style="position: relative; z-index: 2;">
+      <h1 class="glitch" data-text="NƯỚC CÓ THỂ LẤY ĐI TẤT CẢ">NƯỚC CÓ THỂ LẤY ĐI TẤT CẢ</h1>
+      <p style="font-size: 2rem; font-weight: 700; color: var(--alert-red); margin: 0.8rem 0;">CHỈ MẤT 60 GIÂY</p>
+      <p class="sub-slogan">2.000+ trẻ em tử vong mỗi năm tại Việt Nam • 76,6% tai nạn xảy ra tại ao, hồ, sông, suối</p>
+    </div>
+    <div class="wave-overlay"></div>
+    <div class="wave-animated" style="bottom:0; left:0;"></div>
+    <div class="wave-animated" style="bottom:10px;"></div>
+  </section>
+
+  <!-- 2. THỐNG KÊ -->
+  <section>
+    <h2 style="font-family: var(--font-heading); text-align:center; font-size:2rem; border-bottom: 2px solid var(--alert-red); display:inline-block; padding-bottom:0.3rem;">SỐ LIỆU BÁO ĐỘNG</h2>
+    <div class="stats-grid reveal" id="statsContainer">
+      <div class="stat-item"><span class="counter" data-target="2000">0</span><span style="font-size:2rem;">+</span><div class="stat-desc">TRẺ EM TỬ VONG/NĂM</div></div>
+      <div class="stat-item"><span class="counter" data-target="60">0</span><span style="font-size:2rem;">s</span><div class="stat-desc">ĐỦ ĐỂ ĐUỐI NƯỚC</div></div>
+      <div class="stat-item"><span class="counter" data-target="90">0</span><span style="font-size:2rem;">%</span><div class="stat-desc">CÓ THỂ NGĂN CHẶN</div></div>
+    </div>
+    <p style="text-align:center; margin-top:1rem; font-style:italic;">Trung bình 5 trẻ em tử vong mỗi ngày do đuối nước (số liệu 2024: 577 trẻ).</p>
+  </section>
+
+  <!-- 3. DẤU HIỆU NHẬN BIẾT -->
+  <section style="background:#0d0d0d;">
+    <h2 style="font-family: var(--font-heading); text-align:center; color:var(--alert-red); font-size: 1.8rem;">5 DẤU HIỆU ĐUỐI NƯỚC (KHÔNG NHƯ TRONG PHIM)</h2>
+    <div class="signs-grid reveal">
+      <div class="sign-card"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><p>Đầu ngập trong nước, miệng ở mực nước</p></div>
+      <div class="sign-card"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--alert-red)" stroke-width="2"/><path d="M8 12h8M12 8v8"/></svg><p>Mắt mở to hoặc nhắm nghiền, tóc rủ xuống mặt</p></div>
+      <div class="sign-card"><svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg><p>Không vẫy tay, tay dang ngang cố trồi lên</p></div>
+      <div class="sign-card"><svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg><p>Người thẳng đứng, không đạp chân</p></div>
+      <div class="sign-card"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 6a5 5 0 0 1 5 5v1.5"/></svg><p>Không thể kêu cứu hay vẫy tay</p></div>
+    </div>
+  </section>
+
+  <!-- 4. 5 NGUYÊN TẮC AN TOÀN -->
+  <section>
+    <h2 style="font-family: var(--font-heading); font-size:2rem;">5 NGUYÊN TẮC SỐNG CÒN</h2>
+    <ol class="principles-list reveal">
+      <li class="principle-item">Giám sát tuyệt đối – luôn trong tầm mắt khi trẻ gần nước</li>
+      <li class="principle-item">Rào chắn an toàn – đậy kín giếng, bể, ao hồ</li>
+      <li class="principle-item">Học bơi từ 4 tuổi – kỹ năng sinh tồn thiết yếu</li>
+      <li class="principle-item">Chỉ bơi nơi có cứu hộ, mặc áo phao khi đi thuyền</li>
+      <li class="principle-item">Biết cách tự cứu: nổi ngửa, thả lỏng khi gặp dòng chảy</li>
+    </ol>
+  </section>
+
+  <!-- 5. HÀNH ĐỘNG ĐÚNG / SAI -->
+  <section style="background:#0c0c0c;">
+    <h2 style="font-family: var(--font-heading); text-align:center; font-size: 1.8rem;">HÀNH ĐỘNG KHI THẤY NGƯỜI ĐUỐI NƯỚC</h2>
+    <div class="action-columns reveal">
+      <div class="col-correct"><span style="color:var(--accent-green); font-size:1.8rem;">✓ ĐÚNG</span><br>Gọi cứu hộ 113-115, ném phao, dây, gậy dài; không nhảy xuống nếu chưa được huấn luyện.</div>
+      <div class="col-wrong"><span style="color:var(--alert-red); font-size:1.8rem;">✗ SAI</span><br>Nhảy xuống cứu trực tiếp khi không biết bơi, hoặc để nạn nhân bám vào người.</div>
+    </div>
+  </section>
+
+  <!-- 6. KIẾN THỨC MỞ RỘNG -->
+  <section>
+    <h2 style="font-family: var(--font-heading); font-size:2rem; margin-bottom:1rem;">KIẾN THỨC MỞ RỘNG</h2>
+    <div class="knowledge-row">
+      <div style="flex:1; min-width:200px;"><strong>🌊 Vùng nguy hiểm:</strong> Ao hồ, sông suối, bãi biển không phao, kênh rạch – 76,6% tai nạn tại cộng đồng.</div>
+      <div style="flex:1; min-width:200px;"><strong>🆘 Tự cứu:</strong> Giữ bình tĩnh, nổi ngửa, thả lỏng cơ thể, vẫy tay từ từ để thu hút chú ý.</div>
+    </div>
+  </section>
+
+  <!-- 7. SỐ KHẨN CẤP -->
+  <div class="emergency">
+    <p style="font-size:1.5rem; font-weight:700;">GỌI CỨU HỘ NGAY</p>
+    <div class="pulse-number">113 - 115</div>
+    <p style="font-weight:600;">HOẶC 114 (CỨU HỎA) • HÃY LƯU NGAY</p>
+  </div>
+
+  <!-- 8. FOOTER -->
+  <footer>
+    <div class="footer-wave">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60"><path fill="#FF1A1A" fill-opacity="0.9" d="M0,30 C360,60 720,0 1440,30 L1440,60 L0,60 Z"/></svg>
+    </div>
+    <p style="margin-top:2rem; font-family:var(--font-heading); letter-spacing:2px;">PHÒNG CHỐNG ĐUỐI NƯỚC & BƠI LỘI AN TOÀN</p>
+    <p style="color:#aaa;">“Đừng để con số 2.000 trở thành nỗi đau của gia đình bạn.”</p>
+    <small>© 2025 Chiến dịch vì trẻ em Việt Nam</small>
+  </footer>
+
+  <script>
+    (function() {
+      // Intersection Observer cho scroll reveal
+      const revealElements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.25, rootMargin: "0px 0px -50px 0px" });
+      revealElements.forEach(el => observer.observe(el));
+
+      // Counter animation cho thống kê
+      const statsContainer = document.getElementById('statsContainer');
+      const counters = document.querySelectorAll('.counter');
+      let animated = false;
+
+      function animateCounters() {
+        counters.forEach(counter => {
+          const target = +counter.getAttribute('data-target');
+          const duration = 2000;
+          const stepTime = 20;
+          const steps = duration / stepTime;
+          const increment = target / steps;
+          let current = 0;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              counter.textContent = target;
+              clearInterval(timer);
+            } else {
+              counter.textContent = Math.floor(current);
+            }
+          }, stepTime);
+        });
+      }
+
+      const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !animated) {
+            animated = true;
+            animateCounters();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      if (statsContainer) statsObserver.observe(statsContainer);
+
+      // Dự phòng nếu mobile không kích hoạt observer
+      window.addEventListener('load', () => {
+        if (!animated && statsContainer) {
+          const rect = statsContainer.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            animated = true;
+            animateCounters();
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
